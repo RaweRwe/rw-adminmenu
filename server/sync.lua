@@ -1,7 +1,7 @@
 RaweAdmin = {}
-CurrentWeather = Config.StartWeather
-local baseTime, timeOffset, freezeTime, blackout = Config.BaseTime, 0, false, Config.Blackout
-local newWeatherTimer = Config.NewWeatherTimer
+CurrentWeather = Shared.StartWeather
+local baseTime, timeOffset, freezeTime, blackout = Shared.BaseTime, 0, false, Shared.Blackout
+local newWeatherTimer = Shared.NewWeatherTimer
 
 RegisterServerEvent('RaweAdmin:requestSync')
 AddEventHandler('RaweAdmin:requestSync', function()
@@ -21,7 +21,7 @@ RaweAdmin.freezeTime = function(source)
     if source ~= 0 then
         local xPlayer = ESX.GetPlayerFromId(source)
         local playerGroup = xPlayer.getGroup()
-        if Config.Perms[playerGroup] and Config.Perms[playerGroup].CanFreezeTime then
+        if Shared.Perms[playerGroup] and Shared.Perms[playerGroup].CanFreezeTime then
             freezeTime = not freezeTime
             if freezeTime then
                 TriggerClientEvent('esx:showNotification', source, 'Zaman durduruldu') 
@@ -57,7 +57,7 @@ RaweAdmin.Time = function(source, args)
     elseif source ~= 0 then
         local xPlayer = ESX.GetPlayerFromId(source)
         local playerGroup = xPlayer.getGroup()
-        if Config.Perms[playerGroup] and Config.Perms[playerGroup].CanChangeTime then
+        if Shared.Perms[playerGroup] and Shared.Perms[playerGroup].CanChangeTime then
             if tonumber(args[1]) ~= nil and tonumber(args[2]) ~= nil then
                 local argh = tonumber(args[1])
                 local argm = tonumber(args[2])
@@ -93,9 +93,9 @@ RaweAdmin.freezeWeather = function(source)
     if source ~= 0 then
         local xPlayer = ESX.GetPlayerFromId(source)
         local playerGroup = xPlayer.getGroup()
-        if Config.Perms[playerGroup] and Config.Perms[playerGroup].CanFreezeWeather then
-            Config.DynamicWeather = not Config.DynamicWeather
-            if not Config.DynamicWeather then
+        if Shared.Perms[playerGroup] and Shared.Perms[playerGroup].CanFreezeWeather then
+            Shared.DynamicWeather = not Shared.DynamicWeather
+            if not Shared.DynamicWeather then
                 TriggerClientEvent('esx:showNotification', source, 'Dinamik Hava Durumu devre dışı') 
             else
                 TriggerClientEvent('esx:showNotification', source, 'Dinamik Hava Durumu etkin') 
@@ -113,7 +113,7 @@ RaweAdmin.Weather = function(source, args, invokeMethod)
             print("invalid weather syntax")
             return
         else
-            for i,wtype in ipairs(Config.AvailableWeatherTypes) do
+            for i,wtype in ipairs(Shared.AvailableWeatherTypes) do
                 if wtype == string.upper(args[1]) then
                     validWeatherType = true
                 end
@@ -130,7 +130,7 @@ RaweAdmin.Weather = function(source, args, invokeMethod)
     else
         local xPlayer = ESX.GetPlayerFromId(source)
         local playerGroup = xPlayer.getGroup()
-        if Config.Perms[playerGroup] and Config.Perms[playerGroup].CanChangeWeather then
+        if Shared.Perms[playerGroup] and Shared.Perms[playerGroup].CanChangeWeather then
             local validWeatherType = false
             if invokeMethod == "command" then
                 if args[1] == nil then
@@ -164,7 +164,7 @@ RaweAdmin.Blackout = function(source)
     else
         local xPlayer = ESX.GetPlayerFromId(source)
         local playerGroup = xPlayer.getGroup()
-        if Config.Perms[playerGroup] and Config.Perms[playerGroup].CanBlackout then
+        if Shared.Perms[playerGroup] and Shared.Perms[playerGroup].CanBlackout then
             blackout = not blackout
             if blackout then
                 TriggerClientEvent('esx:showNotification', source, 'Karartma Etkin') 
@@ -252,7 +252,7 @@ Citizen.CreateThread(function()
         newWeatherTimer = newWeatherTimer - 1
         Citizen.Wait(60000)
         if newWeatherTimer == 0 then
-            if Config.DynamicWeather then
+            if Shared.DynamicWeather then
                 NextWeatherStage()
             end
             newWeatherTimer = 10

@@ -149,7 +149,7 @@ end
 ---Teleport To Waypoint
 RaweAdmin.TeleportToWaypoint = function()
     ESX.TriggerServerCallback("esx_marker:fetchUserRank", function(playerRank)
-        if Config.Perms[playerRank] and Config.Perms[playerRank].CanTpWp then
+        if Shared.Perms[playerRank] and Shared.Perms[playerRank].CanTpWp then
             local WaypointHandle = GetFirstBlipInfoId(8)
 
             if DoesBlipExist(WaypointHandle) then
@@ -192,7 +192,7 @@ RaweAdmin.GetItemList = function()
 	local weapons = ESX.GetWeaponList()
 	ESX.TriggerServerCallback("RaweAdmin:getJobs", function(jobs) 
 	    ESX.TriggerServerCallback("RaweAdmin:getItemList", function(results) 
-	        SendNUIMessage({type = "items", itemslist = results, weaponlist = weapons, vehiclelist = Config.Vehicles, joblist = jobs })
+	        SendNUIMessage({type = "items", itemslist = results, weaponlist = weapons, vehiclelist = Shared.Vehicles, joblist = jobs })
 
 	    end)
 	end)
@@ -245,7 +245,7 @@ end)
 
 RaweAdmin.SpawnVehicle = function(model)
     ESX.TriggerServerCallback("esx_marker:fetchUserRank", function(playerRank)
-        if Config.Perms[playerRank] and Config.Perms[playerRank].CanSpawnVehicle then
+        if Shared.Perms[playerRank] and Shared.Perms[playerRank].CanSpawnVehicle then
 			local coords = GetEntityCoords(PlayerPedId())
 			local closestVehicle = ESX.Game.GetClosestVehicle(coords)
 
@@ -264,7 +264,7 @@ end
 
 RaweAdmin.Spectate = function(target, bool)
     ESX.TriggerServerCallback("esx_marker:fetchUserRank", function(playerRank)
-        if Config.Perms[playerRank] and Config.Perms[playerRank].CanSpectate then
+        if Shared.Perms[playerRank] and Shared.Perms[playerRank].CanSpectate then
 			local targetPed = GetPlayerPed(GetPlayerFromServerId(target))
 			local name = GetPlayerName(GetPlayerFromServerId(target))
 
@@ -316,7 +316,7 @@ end
 
 RaweAdmin.Noclip = function()
     ESX.TriggerServerCallback("esx_marker:fetchUserRank", function(playerRank)
-        if Config.Perms[playerRank] and Config.Perms[playerRank].CanNoClip then
+        if Shared.Perms[playerRank] and Shared.Perms[playerRank].CanNoClip then
 		    local player = PlayerId()
 			
 		    local msg = "disabled"
@@ -390,7 +390,7 @@ RegisterKeyMapping("admin", "Rawe Admin Menu", "keyboard", 'HOME')
 
 RegisterCommand("admin", function(source,args)
 	ESX.TriggerServerCallback("esx_marker:fetchUserRank", function(playerRank)
-        if Config.Perms[playerRank] then
+        if Shared.Perms[playerRank] then
         	local coords = round(GetEntityCoords(PlayerPedId()), 2)
         	SendNUIMessage({type = "coords", coordData = coords})
     		RaweAdmin.GetPlayers()

@@ -16,7 +16,7 @@ server_scripts {
 }
 
 shared_script {
-    'config.lua'
+    'shared.lua'
 }
 
 ui_page 'html/index.html'

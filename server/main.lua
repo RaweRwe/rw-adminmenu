@@ -1,9 +1,34 @@
 ESX = nil
+
 local itemList, jobList = {}, {}
 RaweAdmin = {}
+
 TriggerEvent('esx:getSharedObject', function(obj) 
     ESX = obj 
 end)
+
+-- Version Control
+
+Citizen.CreateThread(function()
+  Citizen.Wait(1000)
+    VersionControl = function(err, result, headers)
+        if result then
+            local data = json.decode(result)
+            if data.version ~= Config.Version then
+                print("\n")
+                print("^2[RW-AdminMenu] ^0New version finded: ".. data.version .." Updates: \n".. data.updates .. "\n")
+                print("https://github.com/RaweRwe/rw-adminmenu\n")
+            end
+            if data.version == Config.Version then
+                print("\n")
+                print("^2[RW-AdminMenu] ^0You using latest version: ".. data.version)
+            end
+        end
+    end
+  PerformHttpRequest("https://raw.githubusercontent.com/RaweRwe/rw-anticheat-version/main/adminmenu.json", VersionControl, "GET")
+end)
+
+------
 
 AddEventHandler('onResourceStart', function()
     MySQL.ready(function ()
@@ -157,7 +182,11 @@ end
 
 RaweAdmin.AddCash = function(playerID, amount)
     xPlayer = ESX.GetPlayerFromId(playerID)
-    xPlayer.addMoney(amount)
+    if Config.ItemMoney then
+        xPlayer.addInventoryItem(Config.ItemMoneyName, amount)
+    else
+        xPlayer.addMoney(amount)
+    end
 end
 
 RaweAdmin.AddBank = function(playerID, amount)
@@ -204,7 +233,7 @@ RegisterNetEvent("RaweAdmin:GiveWeapon")
 AddEventHandler("RaweAdmin:GiveWeapon", function(playerID, weapon)
     local xPlayer = ESX.GetPlayerFromId(source)
     local playerGroup = xPlayer.getGroup()
-    if Config.Perms[playerGroup] and Config.Perms[playerGroup].CanGiveWeapon then
+    if Shared.Perms[playerGroup] and Shared.Perms[playerGroup].CanGiveWeapon then
         RaweAdmin.AddWeapon(playerID, weapon, 10)
         TriggerClientEvent('esx:showNotification', xPlayer.source, 'You give: '..GetPlayerName(playerID)..' a '..ESX.GetWeaponLabel(weapon)) 
     else
@@ -216,7 +245,7 @@ RegisterNetEvent("RaweAdmin:AddItem")
 AddEventHandler("RaweAdmin:AddItem", function(playerID, selectedItem, amount)
     local xPlayer = ESX.GetPlayerFromId(source)
     local playerGroup = xPlayer.getGroup()
-    if Config.Perms[playerGroup] and Config.Perms[playerGroup].CanGiveItem then
+    if Shared.Perms[playerGroup] and Shared.Perms[playerGroup].CanGiveItem then
         AddItem(playerID, selectedItem, amount)
         TriggerClientEvent('esx:showNotification', source, "You give: "..selectedItem.." to Player: "..GetPlayerName(playerID))
     else
@@ -229,9 +258,14 @@ RegisterNetEvent("RaweAdmin:AddCash")
 AddEventHandler("RaweAdmin:AddCash", function (playerID, amount)
     local xPlayer = ESX.GetPlayerFromId(source)
     local playerGroup = xPlayer.getGroup()
-    if Config.Perms[playerGroup] and Config.Perms[playerGroup].CanAddCash then
-        RaweAdmin.AddCash(playerID, amount)
-        TriggerClientEvent('esx:showNotification', source, "Cash Added: "..amount.." to Player: "..GetPlayerName(playerID))
+    if Shared.Perms[playerGroup] and Shared.Perms[playerGroup].CanAddCash then
+        if Config.ItemMoney then
+            -- RaweAdmin.AddCash(playerID, amount)
+            xPlayer.addInventoryItem(Config.ItemMoneyName, amount)
+        else
+            RaweAdmin.AddCash(playerID, amount)
+            TriggerClientEvent('esx:showNotification', source, "Cash Added: "..amount.." to Player: "..GetPlayerName(playerID))
+        end
     else
        RaweAdmin.Error(source, "noPerms")
     end
@@ -241,7 +275,7 @@ RegisterNetEvent("RaweAdmin:AddBank")
 AddEventHandler("RaweAdmin:AddBank", function (playerID, amount)
     local xPlayer = ESX.GetPlayerFromId(source)
     local playerGroup = xPlayer.getGroup()
-    if Config.Perms[playerGroup] and Config.Perms[playerGroup].CanAddBank then
+    if Shared.Perms[playerGroup] and Shared.Perms[playerGroup].CanAddBank then
         RaweAdmin.AddBank(playerID, amount)
         TriggerClientEvent('esx:showNotification', source, "Bank Added: "..amount.." to Player: "..GetPlayerName(playerID).."'s Bank Account")
     else
@@ -253,7 +287,7 @@ RegisterNetEvent('RaweAdmin:Kick')
 AddEventHandler('RaweAdmin:Kick', function(playerId, reason)
     local xPlayer = ESX.GetPlayerFromId(source)
     local playerGroup = xPlayer.getGroup()
-    if Config.Perms[playerGroup] and Config.Perms[playerGroup].CanKick then
+    if Shared.Perms[playerGroup] and Shared.Perms[playerGroup].CanKick then
         RaweAdmin.Kick(playerId, reason)
         TriggerClientEvent('esx:showNotification', source, "Banned: "..GetPlayerName(playerId))
     else
@@ -265,7 +299,7 @@ RegisterNetEvent('RaweAdmin:Ban')
 AddEventHandler('RaweAdmin:Ban', function(playerId, time, reason)
     local xPlayer = ESX.GetPlayerFromId(source)
     local playerGroup = xPlayer.getGroup()
-    if Config.Perms[playerGroup] and (Config.Perms[playerGroup].CanBanTemp and time ~= 0) or (Config.Perms[playerGroup].CanBanPerm and time == 0) then
+    if Shared.Perms[playerGroup] and (Shared.Perms[playerGroup].CanBanTemp and time ~= 0) or (Shared.Perms[playerGroup].CanBanPerm and time == 0) then
         RaweAdmin.Ban(playerId, time, reason)
         TriggerClientEvent('esx:showNotification', source, "Banned: "..GetPlayerName(playerId))
     else
@@ -278,7 +312,7 @@ AddEventHandler("RaweAdmin:Promote", function (playerID, group)
     local xPlayer = ESX.GetPlayerFromId(source)
     local playerGroup = xPlayer.getGroup()
     local targetPlayer = ESX.GetPlayerFromId(playerID)
-    if Config.Perms[playerGroup] and Config.Perms[playerGroup].CanPromote then
+    if Shared.Perms[playerGroup] and Shared.Perms[playerGroup].CanPromote then
         if group ~= "superadmin" or playerGroup == "superadmin" then
             targetPlayer.setGroup(group)
             TriggerClientEvent('esx:showNotification', source, "Set Group: "..GetPlayerName(playerID).." Rank: "..group)
@@ -292,7 +326,7 @@ RegisterNetEvent("RaweAdmin:Announcement")
 AddEventHandler("RaweAdmin:Announcement", function (message)
     local xPlayer = ESX.GetPlayerFromId(source)
     local playerGroup = xPlayer.getGroup()
-    if Config.Perms[playerGroup] and Config.Perms[playerGroup].CanAnnounce then
+    if Shared.Perms[playerGroup] and Shared.Perms[playerGroup].CanAnnounce then
         TriggerClientEvent('chat:addMessage', -1, {color = { 255, 0, 0}, args = {"ANNOUNCEMENT ", message}})
     else
        RaweAdmin.Error(source, "noPerms")
@@ -309,7 +343,7 @@ RegisterNetEvent("RaweAdmin:Teleport")
 AddEventHandler("RaweAdmin:Teleport", function (targetId, action)
     local xPlayer = ESX.GetPlayerFromId(source)
     local playerGroup = xPlayer.getGroup()
-    if Config.Perms[playerGroup] and Config.Perms[playerGroup].CanTeleport then
+    if Shared.Perms[playerGroup] and Shared.Perms[playerGroup].CanTeleport then
         RaweAdmin.Teleport(targetId, action)
     else
        RaweAdmin.Error(source, "noPerms")
@@ -320,10 +354,10 @@ RegisterNetEvent("RaweAdmin:Slay")
 AddEventHandler("RaweAdmin:Slay", function (target)
     local xPlayer = ESX.GetPlayerFromId(source)
     local playerGroup = xPlayer.getGroup()
-    if Config.Perms[playerGroup] and Config.Perms[playerGroup].CanSlay then
+    if Shared.Perms[playerGroup] and Shared.Perms[playerGroup].CanSlay then
         TriggerClientEvent('RaweAdmin:Slay', target)
         TriggerClientEvent('esx:showNotification', source, "Killed: "..GetPlayerName(target))
-        TriggerClientEvent('esx:showNotification', target, "You were killed by an admin.  ")
+        TriggerClientEvent('esx:showNotification', target, "You were killed by an admin.")
     else
        RaweAdmin.Error(source, "noPerms")
     end
@@ -333,7 +367,7 @@ RegisterNetEvent("RaweAdmin:God")
 AddEventHandler("RaweAdmin:God", function (target)
     local xPlayer = ESX.GetPlayerFromId(source)
     local playerGroup = xPlayer.getGroup()
-    if Config.Perms[playerGroup] and Config.Perms[playerGroup].CanGodmode then
+    if Shared.Perms[playerGroup] and Shared.Perms[playerGroup].CanGodmode then
         TriggerClientEvent('RaweAdmin:God', target)
         TriggerClientEvent('esx:showNotification', source, "GodMode Active "..GetPlayerName(target))
     else
@@ -345,7 +379,7 @@ RegisterNetEvent("RaweAdmin:Freeze")
 AddEventHandler("RaweAdmin:Freeze", function (target)
     local xPlayer = ESX.GetPlayerFromId(source)
     local playerGroup = xPlayer.getGroup()
-    if Config.Perms[playerGroup] and Config.Perms[playerGroup].CanFreeze then
+    if Shared.Perms[playerGroup] and Shared.Perms[playerGroup].CanFreeze then
         TriggerClientEvent('RaweAdmin:Freeze', target)
         TriggerClientEvent('esx:showNotification', source, "Freezed/Unfreezed "..GetPlayerName(target))
     else
@@ -357,7 +391,7 @@ RegisterNetEvent("RaweAdmin:Unban")
 AddEventHandler("RaweAdmin:Unban", function(license)
     local xPlayer = ESX.GetPlayerFromId(source)
     local playerGroup = xPlayer.getGroup()
-    if Config.Perms[playerGroup] and Config.Perms[playerGroup].CanUnban then
+    if Shared.Perms[playerGroup] and Shared.Perms[playerGroup].CanUnban then
         RaweAdmin.Unban(license)
         TriggerClientEvent('esx:showNotification', source, "Unbanned ("..license..")")
     else
@@ -370,7 +404,7 @@ AddEventHandler("RaweAdmin:setJob", function(target, job, rank)
     local xPlayer = ESX.GetPlayerFromId(source)
     local targetPlayer = ESX.GetPlayerFromId(target)
     local playerGroup = xPlayer.getGroup()
-    if Config.Perms[playerGroup] and Config.Perms[playerGroup].CanSetJob then
+    if Shared.Perms[playerGroup] and Shared.Perms[playerGroup].CanSetJob then
         targetPlayer.setJob(job, rank)
         TriggerClientEvent('esx:showNotification', source, "Job Changed: "..GetPlayerName(target).." Job: "..job)
         TriggerClientEvent('esx:showNotification', target, "Your job changed: "..job)
@@ -384,7 +418,7 @@ AddEventHandler("RaweAdmin:revive", function(target)
     local xPlayer = ESX.GetPlayerFromId(source)
     local targetPlayer = ESX.GetPlayerFromId(target)
     local playerGroup = xPlayer.getGroup()
-    if Config.Perms[playerGroup] and Config.Perms[playerGroup].CanRevive then
+    if Shared.Perms[playerGroup] and Shared.Perms[playerGroup].CanRevive then
         targetPlayer.triggerEvent('esx_ambulancejob:revive')
         TriggerClientEvent('esx:showNotification', source, "Revived: "..GetPlayerName(target))
         TriggerClientEvent('esx:showNotification', target, "You were revived by a admin")

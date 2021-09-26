@@ -1,5 +1,5 @@
-CurrentWeather = Config.StartWeather
-local lastWeather, baseTime, timeOffset, timer, freezeTime, blackout = CurrentWeather, Config.BaseTime, 0, 0, false, false
+CurrentWeather = Shared.StartWeather
+local lastWeather, baseTime, timeOffset, timer, freezeTime, blackout = CurrentWeather, Shared.BaseTime, 0, 0, false, false
 
 
 RegisterNetEvent('RaweAdmin:updateWeather')
