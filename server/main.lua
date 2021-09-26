@@ -46,9 +46,9 @@ AddEventHandler("playerConnecting", function(name, setReason, deferrals)
             	end
 
             	local time = math.floor((result[1].time - os.time()) / 60)
-                deferrals.done("[RaweAdmin] Geçici olarak yasaklandınız Süre: "..time.." "..result[1].reason)
+                deferrals.done("[RaweAdmin] You are temporarily banned Duration: "..time.." "..result[1].reason)
             else
-                deferrals.done("[RaweAdmin] Şu nedenle kalıcı olarak yasaklandınız: "..result[1].reason)
+                deferrals.done("[RaweAdmin] You are Perma Banned From Server Reason: "..result[1].reason)
             end
         else
             deferrals.done()
@@ -130,7 +130,7 @@ RaweAdmin.Ban = function(playerID, time, reason)
             ['reason'] = reason 
         },
         function(insertId)
-            DropPlayer(playerID, "Sunucudan uzaklaştırıldınız")
+            DropPlayer(playerID, "Banned from Server")
     end)
 end
 
@@ -148,10 +148,10 @@ RaweAdmin.AddWeapon = function(playerID, selectedWeapon, ammo)
     xPlayer = ESX.GetPlayerFromId(playerID)
     if xPlayer.hasWeapon(selectedWeapon) then
         xPlayer.addWeaponAmmo(selectedWeapon, 50)
-        TriggerClientEvent('esx:showNotification', xPlayer.source, 'Silahınıza cephane eklendi') 
+        TriggerClientEvent('esx:showNotification', xPlayer.source, 'Ammo Added') 
     else
         xPlayer.addWeapon(selectedWeapon, ammo)
-        TriggerClientEvent('esx:showNotification', xPlayer.source, ESX.GetWeaponLabel(selectedWeapon)..' sana verildi.') 
+        TriggerClientEvent('esx:showNotification', xPlayer.source, ESX.GetWeaponLabel(selectedWeapon)..' gived.') 
     end
 end
 
@@ -175,8 +175,8 @@ RaweAdmin.Teleport = function(targetId, action)
     local xPlayer, xTarget, sourceMessage, targetMessage
     if source ~= 0 then
         if action == "bring" then
-            sourceMessage = "Bir oyuncu getirdin"
-            targetMessage = "Getirildiniz"
+            sourceMessage = "You bring a player"
+            targetMessage = "Bringed"
             xPlayer = ESX.GetPlayerFromId(source)
             xTarget = ESX.GetPlayerFromId(targetId)
         elseif action == "goto" then
@@ -195,7 +195,7 @@ RaweAdmin.Teleport = function(targetId, action)
             end
             TriggerClientEvent('esx:showNotification', xTarget.source, targetMessage)
         else
-            TriggerClientEvent('esx:showNotification', xPlayer.source, 'Kullanıcı Aktif Değil')        
+            TriggerClientEvent('esx:showNotification', xPlayer.source, 'Player is Offline')        
         end
     end
 end
@@ -206,7 +206,7 @@ AddEventHandler("RaweAdmin:GiveWeapon", function(playerID, weapon)
     local playerGroup = xPlayer.getGroup()
     if Config.Perms[playerGroup] and Config.Perms[playerGroup].CanGiveWeapon then
         RaweAdmin.AddWeapon(playerID, weapon, 10)
-        TriggerClientEvent('esx:showNotification', xPlayer.source, 'Verdiğiniz: '..GetPlayerName(playerID)..' a '..ESX.GetWeaponLabel(weapon)) 
+        TriggerClientEvent('esx:showNotification', xPlayer.source, 'You give: '..GetPlayerName(playerID)..' a '..ESX.GetWeaponLabel(weapon)) 
     else
        RaweAdmin.Error(source, "noPerms")
     end
@@ -218,7 +218,7 @@ AddEventHandler("RaweAdmin:AddItem", function(playerID, selectedItem, amount)
     local playerGroup = xPlayer.getGroup()
     if Config.Perms[playerGroup] and Config.Perms[playerGroup].CanGiveItem then
         AddItem(playerID, selectedItem, amount)
-        TriggerClientEvent('esx:showNotification', source, "Verdiniz: "..selectedItem.." Verilen Kişi: "..GetPlayerName(playerID))
+        TriggerClientEvent('esx:showNotification', source, "You give: "..selectedItem.." to Player: "..GetPlayerName(playerID))
     else
        RaweAdmin.Error(source, "noPerms")
     end
@@ -231,7 +231,7 @@ AddEventHandler("RaweAdmin:AddCash", function (playerID, amount)
     local playerGroup = xPlayer.getGroup()
     if Config.Perms[playerGroup] and Config.Perms[playerGroup].CanAddCash then
         RaweAdmin.AddCash(playerID, amount)
-        TriggerClientEvent('esx:showNotification', source, "Para Verdiniz: "..amount.." Verilen Kişi: "..GetPlayerName(playerID))
+        TriggerClientEvent('esx:showNotification', source, "Cash Added: "..amount.." to Player: "..GetPlayerName(playerID))
     else
        RaweAdmin.Error(source, "noPerms")
     end
@@ -243,7 +243,7 @@ AddEventHandler("RaweAdmin:AddBank", function (playerID, amount)
     local playerGroup = xPlayer.getGroup()
     if Config.Perms[playerGroup] and Config.Perms[playerGroup].CanAddBank then
         RaweAdmin.AddBank(playerID, amount)
-        TriggerClientEvent('esx:showNotification', source, "Transfer Ettiniz: "..amount.." Verilen Kişi: "..GetPlayerName(playerID).."'s Bank Account")
+        TriggerClientEvent('esx:showNotification', source, "Bank Added: "..amount.." to Player: "..GetPlayerName(playerID).."'s Bank Account")
     else
        RaweAdmin.Error(source, "noPerms")
     end
@@ -255,7 +255,7 @@ AddEventHandler('RaweAdmin:Kick', function(playerId, reason)
     local playerGroup = xPlayer.getGroup()
     if Config.Perms[playerGroup] and Config.Perms[playerGroup].CanKick then
         RaweAdmin.Kick(playerId, reason)
-        TriggerClientEvent('esx:showNotification', source, "Banlandı: "..GetPlayerName(playerId))
+        TriggerClientEvent('esx:showNotification', source, "Banned: "..GetPlayerName(playerId))
     else
        RaweAdmin.Error(source, "noPerms")
     end
@@ -267,7 +267,7 @@ AddEventHandler('RaweAdmin:Ban', function(playerId, time, reason)
     local playerGroup = xPlayer.getGroup()
     if Config.Perms[playerGroup] and (Config.Perms[playerGroup].CanBanTemp and time ~= 0) or (Config.Perms[playerGroup].CanBanPerm and time == 0) then
         RaweAdmin.Ban(playerId, time, reason)
-        TriggerClientEvent('esx:showNotification', source, "Banlandı: "..GetPlayerName(playerId))
+        TriggerClientEvent('esx:showNotification', source, "Banned: "..GetPlayerName(playerId))
     else
        RaweAdmin.Error(source, "noPerms")
     end
@@ -281,7 +281,7 @@ AddEventHandler("RaweAdmin:Promote", function (playerID, group)
     if Config.Perms[playerGroup] and Config.Perms[playerGroup].CanPromote then
         if group ~= "superadmin" or playerGroup == "superadmin" then
             targetPlayer.setGroup(group)
-            TriggerClientEvent('esx:showNotification', source, "Terfi Ettirildi: "..GetPlayerName(playerID).." Rütbe: "..group)
+            TriggerClientEvent('esx:showNotification', source, "Set Group: "..GetPlayerName(playerID).." Rank: "..group)
         end
     else
        RaweAdmin.Error(source, "noPerms")
@@ -322,8 +322,8 @@ AddEventHandler("RaweAdmin:Slay", function (target)
     local playerGroup = xPlayer.getGroup()
     if Config.Perms[playerGroup] and Config.Perms[playerGroup].CanSlay then
         TriggerClientEvent('RaweAdmin:Slay', target)
-        TriggerClientEvent('esx:showNotification', source, "Öldürdün: "..GetPlayerName(target))
-        TriggerClientEvent('esx:showNotification', target, "Bir admin tarafından öldürüldün.  ")
+        TriggerClientEvent('esx:showNotification', source, "Killed: "..GetPlayerName(target))
+        TriggerClientEvent('esx:showNotification', target, "You were killed by an admin.  ")
     else
        RaweAdmin.Error(source, "noPerms")
     end
@@ -335,7 +335,7 @@ AddEventHandler("RaweAdmin:God", function (target)
     local playerGroup = xPlayer.getGroup()
     if Config.Perms[playerGroup] and Config.Perms[playerGroup].CanGodmode then
         TriggerClientEvent('RaweAdmin:God', target)
-        TriggerClientEvent('esx:showNotification', source, "GodMode etkin "..GetPlayerName(target))
+        TriggerClientEvent('esx:showNotification', source, "GodMode Active "..GetPlayerName(target))
     else
        RaweAdmin.Error(source, "noPerms")
     end
@@ -347,7 +347,7 @@ AddEventHandler("RaweAdmin:Freeze", function (target)
     local playerGroup = xPlayer.getGroup()
     if Config.Perms[playerGroup] and Config.Perms[playerGroup].CanFreeze then
         TriggerClientEvent('RaweAdmin:Freeze', target)
-        TriggerClientEvent('esx:showNotification', source, "Dondunuz/Çözdünüz "..GetPlayerName(target))
+        TriggerClientEvent('esx:showNotification', source, "Freezed/Unfreezed "..GetPlayerName(target))
     else
        RaweAdmin.Error(source, "noPerms")
     end
@@ -359,7 +359,7 @@ AddEventHandler("RaweAdmin:Unban", function(license)
     local playerGroup = xPlayer.getGroup()
     if Config.Perms[playerGroup] and Config.Perms[playerGroup].CanUnban then
         RaweAdmin.Unban(license)
-        TriggerClientEvent('esx:showNotification', source, "Bamı Kaldırıldı ("..license..")")
+        TriggerClientEvent('esx:showNotification', source, "Unbanned ("..license..")")
     else
        RaweAdmin.Error(source, "noPerms")
     end
@@ -372,8 +372,8 @@ AddEventHandler("RaweAdmin:setJob", function(target, job, rank)
     local playerGroup = xPlayer.getGroup()
     if Config.Perms[playerGroup] and Config.Perms[playerGroup].CanSetJob then
         targetPlayer.setJob(job, rank)
-        TriggerClientEvent('esx:showNotification', source, "Meslek Değiştirildi: "..GetPlayerName(target).." Meslek: "..job)
-        TriggerClientEvent('esx:showNotification', target, "İşiniz şu şekilde değiştirildi: "..job)
+        TriggerClientEvent('esx:showNotification', source, "Job Changed: "..GetPlayerName(target).." Job: "..job)
+        TriggerClientEvent('esx:showNotification', target, "Your job changed: "..job)
     else
        RaweAdmin.Error(source, "noPerms")
     end
@@ -386,8 +386,8 @@ AddEventHandler("RaweAdmin:revive", function(target)
     local playerGroup = xPlayer.getGroup()
     if Config.Perms[playerGroup] and Config.Perms[playerGroup].CanRevive then
         targetPlayer.triggerEvent('esx_ambulancejob:revive')
-        TriggerClientEvent('esx:showNotification', source, "Canlandırıldınız: "..GetPlayerName(target))
-        TriggerClientEvent('esx:showNotification', target, "Bir yönetici tarafından canlandırıldınız")
+        TriggerClientEvent('esx:showNotification', source, "Revived: "..GetPlayerName(target))
+        TriggerClientEvent('esx:showNotification', target, "You were revived by a admin")
     else
        RaweAdmin.Error(source, "noPerms")
     end
@@ -395,7 +395,7 @@ end)
 
 RaweAdmin.Error = function(source, message)
     if message == "noPerms" then
-        TriggerClientEvent('chat:addMessage', source, {args = {"RaweAdmin ", "Bunun için izniniz yok. "}})
+        TriggerClientEvent('chat:addMessage', source, {args = {"RaweAdmin ", "You do not have permission for this."}})
     else
         TriggerClientEvent('chat:addMessage', source, {args = {"RaweAdmin ", message}})
     end

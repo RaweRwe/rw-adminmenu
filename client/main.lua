@@ -15,7 +15,7 @@ RegisterNUICallback("exit", function(data)
 end)
 
 RegisterNUICallback("ban", function(data)
-    TriggerServerEvent("RaweAdmin:Ban", data.playerid, tonumber(data.inputData), "Zaman aşımına uğradınız")
+    TriggerServerEvent("RaweAdmin:Ban", data.playerid, tonumber(data.inputData), "You have timed out")
 end)
 
 RegisterNUICallback("permaban", function(data)
@@ -168,12 +168,12 @@ RaweAdmin.TeleportToWaypoint = function()
 
                     Citizen.Wait(5)
                 end
-                ESX.ShowNotification("Işınlandınız")
+                ESX.ShowNotification("Teleported")
             else
-                ESX.ShowNotification("Lütfen bir yeri işaretleyin")
+                ESX.ShowNotification("Select Waypoint")
             end
         else
-            TriggerEvent('chat:addMessage', {args = {"RaweAdmin", " Yetkiniz Yetersiz"}})
+            TriggerEvent('chat:addMessage', {args = {"RaweAdmin", " You are not admin"}})
         end
     end)
 end
@@ -257,7 +257,7 @@ RaweAdmin.SpawnVehicle = function(model)
 				end		
 			end)
 		else
-            TriggerEvent('chat:addMessage', {args = {"RaweAdmin", " Bunun için izniniz yok."}})
+            TriggerEvent('chat:addMessage', {args = {"RaweAdmin", " You are not admin."}})
         end
 	end)
 end
@@ -281,7 +281,7 @@ RaweAdmin.Spectate = function(target, bool)
 						RequestCollisionAtCoord(targetx,targety,targetz)
 						NetworkSetInSpectatorMode(true, targetPed)
 
-						ESX.ShowNotification("İzleyici:  "..name)
+						ESX.ShowNotification("Spectator:  "..name)
 
 						if(IsScreenFadedOut()) then
 							DoScreenFadeIn(1000)
@@ -298,7 +298,7 @@ RaweAdmin.Spectate = function(target, bool)
 
 						RequestCollisionAtCoord(targetx,targety,targetz)
 						NetworkSetInSpectatorMode(false, targetPed)
-						ESX.ShowNotification(name..' izlemeyi bıraktı.')
+						ESX.ShowNotification(name..' stopped spectating.')
 
 						if(IsScreenFadedOut()) then
 							DoScreenFadeIn(1000)
@@ -306,10 +306,10 @@ RaweAdmin.Spectate = function(target, bool)
 					end
 				end
 			else
-				ESX.ShowNotification("Kendinizi izleyemezsiniz.")
+				ESX.ShowNotification("You can't spectate yourself.")
 			end
 	    else
-            TriggerEvent('chat:addMessage', {args = {"RaweAdmin ", " Bunun için izniniz yok"}})
+            TriggerEvent('chat:addMessage', {args = {"RaweAdmin ", " You are not admin!"}})
         end
     end)
 end
@@ -330,8 +330,8 @@ RaweAdmin.Noclip = function()
 				msg = "enabled"
 			end
 
-			TriggerEvent('chat:addMessage', {args = {"RaweAdmin ", " Noclip Olmuştur " .. msg}})
-			ESX.ShowNotification(" NOClip Moduna Geçti " .. msg)
+			TriggerEvent('chat:addMessage', {args = {"RaweAdmin ", " Noclip Has Been " .. msg}})
+			ESX.ShowNotification(" Switched to Noclip Mode " .. msg)
 			
 			local heading = 0
 			Citizen.CreateThread(function()
@@ -380,7 +380,7 @@ RaweAdmin.Noclip = function()
 				end
 			end)
 		else
-            TriggerEvent('chat:addMessage', {args = {"RaweAdmin ", " Yetkiniz yok!"}})
+            TriggerEvent('chat:addMessage', {args = {"RaweAdmin ", " You are not admin!"}})
         end
     end)
 end
@@ -397,7 +397,7 @@ RegisterCommand("admin", function(source,args)
     		RaweAdmin.GetItemList()
     		SetDisplay(true)
     	else
-    		TriggerEvent('chat:addMessage', {args = {"RaweAdmin", " Yetkiniz Yetersiz"}})
+    		TriggerEvent('chat:addMessage', {args = {"RaweAdmin", " You are not admin"}})
     	end
     end)
 end)
