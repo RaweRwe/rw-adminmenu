@@ -1,0 +1,621 @@
+@charset "utf-8";
+@import url(https://fonts.googleapis.com/css?family=Source+Sans+Pro&display=swap);
+@import url(https://fonts.googleapis.com/css?family=Oswald);
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Oswald, sans-serif;
+    overflow: hidden;
+    height: 100%;
+    width: 100%
+}
+
+#container {
+    display: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    height: 640px;
+    width: 840px;
+    margin-top: 10px;
+    background-color: rgba(44, 44, 44, .94);
+    border: 1px solid rgba(88, 88, 88, .65);
+    border-radius: 10px;
+    overflow: hidden
+}
+
+#inner {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: stretch;
+    overflow: hidden
+}
+
+header {
+    width: 100%;
+    height: 65px;
+    color: #fff;
+    font-size: 24px;
+    overflow: hidden
+}
+
+main {
+    flex: 1 1;
+    position: relative;
+    z-index: 1;
+    letter-spacing: .09em
+}
+
+#search {
+    border: 1px solid rgba(88, 88, 88, .45);
+    margin-top: 5px;
+    padding: 10px 10px;
+    font-weight: 600;
+    font-size: 14px;
+    display: inline-block;
+    box-sizing: border-box;
+    color: #fff;
+    text-align: left;
+    background-color: rgba(101, 101, 101, .8);
+    width: 145px;
+    border-radius: 5px;
+    float: right
+}
+
+#search::-webkit-input-placeholder {
+    font-family: Helvetica, 'Font Awesome 5 Free', sans-serif;
+    font-weight: 600;
+    text-align: center;
+    color: #c8c8c8
+}
+
+.grid-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 10px
+}
+
+.grid-container>div {
+    text-align: center;
+    padding: 5px
+}
+
+.action-button {
+    width: 100px;
+    height: 100px
+}
+
+#actions,
+#server,
+#weapons {
+    display: none;
+    height: calc(100% - 80px);
+    overflow-x: scroll;
+    overflow-x: hidden
+}
+
+#actions:focus {
+    outline: 0
+}
+
+#server {
+    display: block
+}
+
+footer {
+    position: absolute;
+    bottom: 5px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 12px;
+    color: #868686
+}
+
+.btn {
+    background-color: rgba(84, 84, 84, .8);
+    border: none;
+    color: #fff;
+    width: 120px;
+    height: 64px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px
+}
+
+.btn.ban,
+.btn.kick {
+    width: 160px;
+    margin-bottom: 15px
+}
+
+.btn.disabled {
+    background: 0 0;
+    border: 2px dashed rgba(84, 84, 84, .8);
+    color: #848484;
+    width: 120px;
+    height: 64px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px
+}
+
+.btn.permaban {
+    width: 160px;
+    margin-left: 15px;
+    background-color: rgba(255, 15, 15, .2);
+    color: #ff0f0f;
+    margin-bottom: 15px
+}
+
+.btn:hover {
+    background: linear-gradient(to right, #2b5876, #4e4376)
+}
+
+#playerlist {
+    flex: 0 0 260px;
+    background-color: rgba(34, 34, 34, .8);
+    letter-spacing: .14em;
+    margin-left: auto;
+    overflow: hidden
+}
+
+.ptitle {
+    min-width: 90px;
+    height: 45px;
+    background-color: rgba(58, 58, 58, .9);
+    padding: 10px;
+    margin: auto;
+    line-height: 45px
+}
+
+.pname {
+    color: #fff;
+    font-size: 16px;
+    float: left;
+    margin-left: 10px
+}
+
+#pinner {
+    height: calc(100% - 50px);
+    width: 260px;
+    overflow-x: scroll;
+    overflow-x: hidden
+}
+
+::-webkit-scrollbar {
+    width: 8px
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: rgba(88, 88, 88, .8);
+    border-radius: 5px
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #555
+}
+
+.banitem,
+.item {
+    height: 60px;
+    position: relative;
+    display: inline-block;
+    left: 0;
+    line-height: 60px;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    color: #fff;
+    transition: .2s;
+    margin: 5px;
+    border-radius: 10px
+}
+
+.banitem {
+    background-color: rgba(28, 28, 28, .8);
+    font-family: 'Source Sans Pro', sans-serif
+}
+
+.selected {
+    background: linear-gradient(to right, #2b5876, #4e4376)
+}
+
+.item:hover {
+    background-color: rgba(48, 48, 48, .8);
+    color: #fff
+}
+
+.banitem:hover {
+    background-color: rgba(82, 82, 82, .8);
+    color: #fff
+}
+
+.item span {
+    float: left;
+    margin-left: 15px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis
+}
+
+.bannedplayer {
+    width: 140px
+}
+
+.banitem .time {
+    color: #ca0b00 !important;
+    width: 140px;
+    font-weight: 700
+}
+
+.banitem .reason {
+    padding-right: 10px;
+    width: 250px
+}
+
+.banitem span {
+    display: inline-block;
+    font-size: 14px;
+    margin-left: 10px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis
+}
+
+.playerid {
+    display: inline-block;
+    min-width: 22px;
+    padding: 2px 5px;
+    line-height: 22px;
+    border-radius: 25px;
+    background-color: #fff;
+    color: #292929;
+    text-align: center
+}
+
+.menutitle {
+    display: inline-block;
+    height: 65px;
+    line-height: 65px;
+    font-weight: 700
+}
+
+.headername {
+    display: none;
+    padding-left: 15px;
+    color: #818181
+}
+
+.sectiontitle {
+    display: block;
+    width: 100%;
+    margin-top: 10px;
+    color: #fff;
+    text-align: center
+}
+
+.hl {
+    width: 100%;
+    font-size: 24px;
+    text-align: center;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    color: #fff
+}
+
+.btn .fas {
+    font-size: 24px !important;
+    display: block;
+    width: 100%;
+    padding-bottom: 10px
+}
+
+.description {
+    color: #fff;
+    padding-left: 10px
+}
+
+input,
+select {
+    background-color: rgba(44, 44, 44, .8);
+    border: 1px solid #a5a5a5;
+    width: 50px;
+    padding: 10px 10px;
+    font-size: 14px;
+    font-weight: 600;
+    display: inline-block;
+    box-sizing: border-box;
+    text-align: center;
+    color: #fff;
+    border-radius: 24px
+}
+
+.dropdown {
+    width: 200px;
+    border-radius: 5px
+}
+
+#row {
+    height: 45px
+}
+
+.button {
+    background-color: transparent;
+    border: none;
+    float: left;
+    display: block;
+    font-size: 16px;
+    height: 25px;
+    color: #fff;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    padding: 5px;
+    margin: 10px;
+    outline: 0
+}
+
+.button:hover {
+    background-color: rgba(120, 120, 120, .2);
+    color: #fff
+}
+
+.btn.confirm {
+    background-color: #1e65a8 !important;
+    color: #fff !important;
+    height: auto;
+    padding: 10px
+}
+
+#datainput {
+    background-color: rgba(101, 101, 101, .8);
+    width: 280px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    float: left
+}
+
+#datainput::-webkit-input-placeholder,
+#search::-webkit-input-placeholder {
+    color: #c8c8c8
+}
+
+#inputtitle {
+    width: 100%;
+    font-size: 24px;
+    margin-bottom: 20px;
+    text-align: center;
+    color: #fff
+}
+
+#buttonwrap {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center
+}
+
+#confirmaction,
+#inputmanager {
+    display: none;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    backdrop-filter: blur(24px);
+    background-color: rgba(44, 44, 44, .8);
+    z-index: 1
+}
+
+#inputwrap {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%)
+}
+
+#confirminput {
+    background-color: #1e65a8;
+    margin-top: 10px
+}
+
+#confirm {
+    background-color: #fff;
+    color: #000 !important
+}
+
+#cancelinput,
+#confirm,
+#confirminput {
+    height: auto !important;
+    margin-top: 10px;
+    margin-right: 15px;
+    color: #fff;
+    padding: 10px 15px
+}
+
+#button:hover,
+.back:hover {
+    background-color: rgba(120, 120, 120, .2)
+}
+
+#perms {
+    margin-top: 10px
+}
+
+#info {
+    font-family: 'Source Sans Pro', sans-serif;
+    background: -webkit-linear-gradient(to right, #2c3e50, #2980b9);
+    background: linear-gradient(to right, #2c3e50, #2980b9);
+    color: #fff;
+    margin-bottom: 50px;
+    padding-bottom: 15px;
+    letter-spacing: normal
+}
+
+#info .inner {
+    padding-left: 15px
+}
+
+#info .titlebox {
+    font-size: 28px;
+    padding: 15px;
+    text-align: left
+}
+
+.title {
+    display: inline-block;
+    width: 120px;
+    padding-right: 5px;
+    padding-left: 15px;
+    color: #2980b9
+}
+
+.back {
+    position: relative;
+    display: none;
+    margin-top: 15px;
+    margin-right: 15px;
+    text-decoration: none;
+    color: #fff;
+    font-size: 18px;
+    padding: 5px 20px;
+    border-radius: 5px;
+    z-index: 2;
+    font-weight: 400;
+    float: right
+}
+
+#button {
+    background-color: rgba(80, 80, 80, .8);
+    text-decoration: none;
+    color: #fff;
+    font-size: 18px;
+    margin-top: 15px;
+    margin-right: 15px;
+    padding: 5px 10px;
+    border-radius: 5px;
+    float: right
+}
+
+.help #button {
+    margin: 0
+}
+
+#bans,
+#items,
+#vehicles {
+    display: none;
+    height: calc(100% - 65px)
+}
+
+#itemlist,
+#vehiclelist,
+#weaponlist {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    height: calc(100% - 65px);
+    overflow-x: scroll;
+    overflow-x: hidden
+}
+
+#banlist {
+    height: calc(100% - 85px);
+    overflow-x: scroll;
+    overflow-x: hidden
+}
+
+#itemamount {
+    width: 100%;
+    font-size: 24px;
+    text-align: center;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    color: #fff
+}
+
+#inventoryitemwrap {
+    margin: 5px
+}
+
+.inventoryitem {
+    background-color: rgba(82, 82, 82, .4);
+    width: 120px;
+    height: 150px;
+    transition: .2s;
+    -webkit-transform: scale(1);
+    transform: scale(1);
+    overflow: hidden;
+    border-radius: 10px
+}
+
+.inventoryitem:active {
+    transition: .1s;
+    background-color: #6fa8dc
+}
+
+.inventoryitem:hover {
+    -webkit-transform: scale(1.2);
+    transform: scale(1.2)
+}
+
+.name {
+    display: block;
+    color: #fff;
+    overflow: hidden;
+    text-align: center;
+    font-size: 14px
+}
+
+.inventoryitem .img {
+    position: relative;
+    height: 120px
+}
+
+.inventoryitem img {
+    display: block;
+    margin: auto
+}
+
+.help {
+    color: #fff;
+    text-align: center
+}
+
+.centered {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%)
+}
+
+.coords {
+    display: inline-block;
+    font-size: 28px;
+    margin-bottom: 10px
+}
+
+.clipboard {
+    display: inline-block;
+    text-decoration: none;
+    color: #fff;
+    padding: 5px;
+    border-radius: 5px
+}
+
+.clipboard:hover {
+    background-color: #fff;
+    color: #242424
+}
+
+.drag {
+    border: 2px dashed #848484 !important
+}

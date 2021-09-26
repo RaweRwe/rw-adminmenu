@@ -1,0 +1,173 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Rawe Admin Menu</title>
+<link href="./index.css" rel="stylesheet" type="text/css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://kit.fontawesome.com/488c064d5d.js" crossorigin="anonymous"></script>
+<script src="client://game/ui/jquery.js" type="text/javascript"></script>
+<script src="./index.js" type="text/javascript"></script>
+</head>
+<body>
+	<div id="container">
+		<div id="inner">
+  				<div id="playerlist">
+				<div class ="ptitle">
+					<span class="pname">Oyuncular</span><input type="text" id = "search" placeholder = "&#xf002; Oyuncu Adı / id" value="" />  		
+		  		</div>
+			  	<div id="pinner">
+		   		</div>
+		  	</div>
+		<main>
+		<header><span class="menutitle" style="padding-left:15px">Rawe Admin Menu</span><a href="#back" id="back" class="back"><i class="fas fa-chevron-left"></i> GERİ</a><a href="#server" id="button" class="server" style="display:none">Admin İşlemleri</a></header>
+		<div id="server">
+			<div id="info">
+				<div class="titlebox">Kordinatınız</div>
+				<div class="inner">
+				<div class="coords"></div>
+				<a href="#coords" class="clipboard" id="clipboard">Kopyala</a>
+				</div>
+			</div>
+			<div class="sectiontitle">Admin İşlemleri</div>
+			<div id="grid-container" class="grid-container">
+				<div><button class="btn" data-action="announce"><i class="fas fa-bullhorn"></i><span>Duyurular</span></button></div>
+				<div><button class="btn" data-action="spawnVehicle"><i class="fas fa-car"></i><span>Araç Yarat</s></span></button></div>
+				<div><button class="btn" data-action="noclip"><i class="fas fa-ghost"></i><span>Noclip</span></button></div>
+				<div><button class="btn" id="tpwp-button"><i class="fas fa-route"></i>Kordinata Işınlan</button></div>
+				<div><button class="btn" data-action="blackout"><i class="fas fa-moon"></i>Karartma</button></div>
+				<div><button class="btn" data-action="freezeWeather"><i class="fas fa-sun"></i>Havadurumunu Durdur</button></div>
+				<div><button class="btn" data-action="setTime"><i class="fas fa-clock"></i>Zamanı Değiştir</button></div>
+				<div><button class="btn" data-action="freezeTime"><i class="fas fa-clock"></i>Zamanı Dondur</button></div>
+				<div><button class="btn" data-action="banlist"><i class="fas fa-ban"></i>Ban Listesi</button></div>
+			</div>
+			<div class="sectiontitle">Hava durumunu değiştir</div>
+				<div id="grid-container" class="grid-container">
+					<div id="row" style="width:90%">
+						<span class="description"></span>
+						<select name="weatherTypes" id="weatherTypes" class="dropdown">
+							<option value="EXTRASUNNY">EXTRASUNNY</option>
+							<option value="CLEAR">CLEAR</option>
+							<option value="NEUTRAL">NEUTRAL</option>
+							<option value="SMOG">SMOG</option>
+							<option value="FOGGY">FOGGY</option>
+							<option value="OVERCAST">OVERCAST</option>
+							<option value="CLOUDS">CLOUDS</option>
+							<option value="CLEARING">CLEARING</option>
+							<option value="RAIN">RAIN</option>
+							<option value="THUNDER">THUNDER</option>
+							<option value="XMAS">XMAS</option>
+							<option value="BLIZZARD">BLIZZARD</option>
+							<option value="SNOWLIGHT">SNOWLIGHT</option>
+							<option value="HALLOWEEN">HALLOWEEN</option>
+						</select>
+					</div>
+					<button class="btn confirm" data-action="changeWeather">Onayla</button>
+				</div>			
+		</div>
+		<div id="actions">
+		<div id="info">
+			<div class="titlebox"><i class="fas fa-info-circle"></i> Hakkında <span class="playername"></span></div>
+			<div id="section">
+			<span class="title">RP Adı:</span><span class="data" data-name="name"></span>
+			</div>
+			<div id="section">
+			<span class="title">Steamid/License:</span><span class="data" data-name="license"></span>
+			</div>
+			<div id="section">
+			<span class="title">Para: </span><span class="data" data-name="money"></span>
+			</div>
+		</div>
+		<div class="sectiontitle">İşlemler</div>
+			<div id="grid-container" class="grid-container">
+				<div><button class="btn kick" data-action="kick"><i class="fas fa-gavel"></i><span> Kickle </span></button></div>
+				<div><button class="btn ban" data-action="ban"><i class="fas fa-ban"></i><span> Banla </span></button></div>
+				<div><button class="btn permaban" data-action="permaban"><i class="fas fa-ban"></i><span> Kalıcı Yasakla </span></button></div>
+				<div><button class="btn" data-action="giveWeapon"><i class="fas fa-fighter-jet"></i><span> Silah Ver </span></button></div>
+				<div><button class="btn" data-action="bring"><i class="fas fa-people-carry"></i>Getir</button></div>
+				<div><button class="btn" data-action="goto"><i class="fas fa-map-marked-alt"></i>Yanına Git</button></div>
+				<div><button class="btn" data-action="spectate"><i class="fas fa-binoculars"></i>İzle</button></div>
+				<div><button class="btn" data-action="freeze"><i class="fas fa-temperature-low"></i>Dondur</button></div>
+				<div><button class="btn" data-action="kill"><i class="fas fa-skull-crossbones"></i>Öldür</button></div>
+				<div><button class="btn" data-action="revive"><i class="fas fa-briefcase-medical"></i>Canlandır</button></div>
+				<div><button class="btn" data-action="god"><i class="fas fa-bible"></i>Ölümsüzlük</button></div>
+				<div><button class="btn" data-action="inventory"><i class="fas fa-box-open"></i>Envanter</button></div>
+				<div><button class="btn" data-action="addCash"><i class="fas fa-money-check-alt"></i>Para ver (Nakit)</button></div>
+				<div><button class="btn" data-action="addBank"><i class="fas fa-money-check-alt"></i>Para ver (Banka)</button></div>
+				<div><button class="btn" data-action="giveItem"><i class="fas fa-gift"></i>Item ver</button></div>
+			</div>
+		<div class="sectiontitle">Değiştir <span class="playername">Oyuncular</span> Meslek</div>
+			<div id="grid-container" class="grid-container">
+				<div id="row">
+					<span class="description">Meslek</span>
+					<select name="jobs" id="jobs" class="dropdown">
+					</select>
+				</div>
+				<div id="row">
+					<span class="description">Rütbe</span>
+					<select name="ranks" id="ranks" class="dropdown">
+						<option value="0">Sivil</option>
+					</select>
+				</div>
+				<button class="btn confirm" data-action="setJob">Onayla</button>
+			</div>
+		<div id="perms">	
+		<div class="sectiontitle">Yükselt/Düşür</div>
+			<div id="grid-container" class="grid-container">
+				<div><button class="btn" data-action="promote" data-level="user"><i class="fas fa-user"></i>Oyuncu</button></div>
+				<div><button class="btn" data-action="promote" data-level="mod"><i class="fas fa-user-shield"></i>Moderator</button></div>
+				<div><button class="btn" data-action="promote" data-level="admin"><i class="fas fa-user-cog"></i>Admin</button></div>
+				<div><button class="btn" data-action="promote" data-level="superadmin"><i class="fas fa-star"></i>Superadmin</button></div>
+			</div>
+		</div>
+		</div>
+				   	<div id="inputmanager">
+				   		<div id="inputwrap">
+		   	    		<div class="inputtitle" id="inputtitle"></div>
+		   	    		<input type="text" id = "datainput" class = "mtextareas" placeholder = "" />
+		   	    		<br />
+		   	    		<div id="buttonwrap">
+		   	    		<button class = "button" id = "confirminput">Onayla</button>
+		   	    		<button class = "button" id = "cancelinput">İptal Et</button>
+		   	    		</div>
+		   	    		</div>
+		   	    	</div>
+
+		   	    	<div id="confirmaction">
+				   		<div id="inputwrap">
+		   	    		<div class="inputtitle" id="inputtitle"></div>
+		   	    		<br />
+		   	    		<div id="buttonwrap">
+		   	    		<button class = "button" id = "confirm">Onayla</button>
+		   	    		<button class = "button" id = "cancelinput">İptal Et</button>
+		   	    		</div>
+		   	    		</div>
+		   	    	</div>
+
+		   	    	<div id="weapons">
+		   	    		<div class="hl">Silah Seç</div>
+						<div id="weaponlist"></div>
+		   	    	</div>
+
+		   	    	<div id="items">
+		   	    		<div id="itemamount">Ver <input type="text" id = "qty" class = "mtextareas" value="1" /> to <span class="playername"></span></div>
+		   	    		<div id="itemlist"></div>
+		   	    	</div>
+
+		   	    	<div id="vehicles">
+		   	    		<div class="hl">Araç Yarat</div>
+		   	    		<div id="vehiclelist">
+		   	    		</div>
+		   	    	</div>
+
+		   	    	<div id="bans">
+		   	    		<div class="sectiontitle">Ban Listesi</div>
+		   	    		<br />
+		   	    		<div id="banlist"></div>
+		   	    	</div>
+		</main>
+  	</div>
+	</div>
+</body>
+	</html>
+	
